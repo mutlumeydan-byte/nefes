@@ -9,12 +9,20 @@ if (!ASC_KEY_ID || !ASC_ISSUER_ID || !ASC_PRIVATE_KEY || !ASC_APP_ID) throw new 
 
 const API = 'https://api.appstoreconnect.apple.com/v1';
 
+// Normalize the private key: strip CR/whitespace, ensure PEM framing
+let PK = ASC_PRIVATE_KEY.replace(/\r/g, '').trim();
+if (!PK.includes('BEGIN')) PK = `-----BEGIN PRIVATE KEY-----\n${PK.replace(/\s+/g, '').match(/.{1,64}/g).join('\n')}\n-----END PRIVATE KEY-----`;
+try {
+  const k = crypto.createPrivateKey(PK);
+  console.log('Key OK:', k.asymmetricKeyType, k.asymmetricKeyDetails?.namedCurve, '| keyId len', ASC_KEY_ID.length, '| issuer len', ASC_ISSUER_ID.length, '| pem lines', PK.split('\n').length);
+} catch (e) { throw new Error('Private key could not be parsed: ' + e.message); }
+
 function b64url(buf) { return Buffer.from(buf).toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_'); }
 function jwt() {
   const now = Math.floor(Date.now() / 1000);
   const header = b64url(JSON.stringify({ alg: 'ES256', kid: ASC_KEY_ID, typ: 'JWT' }));
   const payload = b64url(JSON.stringify({ iss: ASC_ISSUER_ID, iat: now, exp: now + 1200, aud: 'appstoreconnect-v1' }));
-  const sig = crypto.sign('sha256', Buffer.from(`${header}.${payload}`), { key: ASC_PRIVATE_KEY, dsaEncoding: 'ieee-p1363' });
+  const sig = crypto.sign('sha256', Buffer.from(`${header}.${payload}`), { key: PK, dsaEncoding: 'ieee-p1363' });
   return `${header}.${payload}.${b64url(sig)}`;
 }
 async function api(method, url, body) {
