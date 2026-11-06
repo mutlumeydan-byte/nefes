@@ -21,7 +21,7 @@ function b64url(buf) { return Buffer.from(buf).toString('base64').replace(/=/g, 
 function jwt() {
   const now = Math.floor(Date.now() / 1000);
   const header = b64url(JSON.stringify({ alg: 'ES256', kid: ASC_KEY_ID, typ: 'JWT' }));
-  const payload = b64url(JSON.stringify({ iss: ASC_ISSUER_ID, iat: now, exp: now + 1200, aud: 'appstoreconnect-v1' }));
+  const payload = b64url(JSON.stringify({ iss: ASC_ISSUER_ID, iat: now, exp: now + 600, aud: 'appstoreconnect-v1' }));
   const sig = crypto.sign('sha256', Buffer.from(`${header}.${payload}`), { key: PK, dsaEncoding: 'ieee-p1363' });
   return `${header}.${payload}.${b64url(sig)}`;
 }
