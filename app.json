@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "Nefes",
+    "slug": "nefes",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0b0f1a",
+    "newArchEnabled": true,
+    "ios": {
+      "bundleIdentifier": "com.nefes.app",
+      "buildNumber": "1",
+      "supportsTablet": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "UIStatusBarStyle": "UIStatusBarStyleLightContent"
+      }
+    },
+    "android": {
+      "package": "com.nefes.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0b0f1a"
+      },
+      "permissions": [
+        "VIBRATE"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 160,
+          "resizeMode": "contain",
+          "backgroundColor": "#0b0f1a"
+        }
+      ],
+      "expo-localization"
+    ],
+    "owner": "maidannoir"
+  }
+}

@@ -1,0 +1,37 @@
+name: iOS → TestFlight (EAS)
+on:
+  workflow_dispatch:
+    inputs:
+      submit:
+        description: "TestFlight'a yükle (eas submit)"
+        type: boolean
+        default: true
+
+jobs:
+  ios:
+    runs-on: ubuntu-latest
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      EXPO_APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      EXPO_APPLE_TEAM_TYPE: INDIVIDUAL
+      EXPO_ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      EXPO_ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      EXPO_ASC_API_KEY_PATH: ${{ github.workspace }}/asc_key.p8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm install -g eas-cli
+      - run: npm ci
+      - name: Write App Store Connect API key
+        run: printf '%s' "${{ secrets.ASC_PRIVATE_KEY }}" > "$EXPO_ASC_API_KEY_PATH"
+      - name: Link EAS project
+        run: eas init --non-interactive --force || eas project:init --non-interactive --force
+      - name: Build (EAS cloud, Apple credentials via ASC API key)
+        run: eas build --platform ios --profile production --non-interactive --wait
+      - name: Submit to TestFlight
+        if: ${{ inputs.submit }}
+        run: eas submit --platform ios --latest --non-interactive
+      - name: Cleanup
+        if: always()
+        run: rm -f "$EXPO_ASC_API_KEY_PATH"

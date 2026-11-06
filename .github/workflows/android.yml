@@ -1,0 +1,17 @@
+name: Android AAB (EAS)
+on:
+  workflow_dispatch:
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm install -g eas-cli
+      - run: npm ci
+      - run: eas init --non-interactive --force || eas project:init --non-interactive --force
+      - run: eas build --platform android --profile production --non-interactive --wait
