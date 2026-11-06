@@ -2,7 +2,7 @@
 
 ## Ortak
 - **Uygulama adı:** Nefes
-- **Paket / Bundle ID:** com.nefes.app
+- **Paket / Bundle ID:** com.mutlumeydan.nefes
 - **Fiyat:** Ücretli — 0,99 USD (Tier 1). Türkiye fiyatı mağaza otomatik belirler; istersen elle 29,99–39,99 TL.
 - **Kategori:** Sağlık ve Fitness (ikincil: Yaşam Tarzı)
 - **Yaş:** 4+ / Herkes

@@ -9,7 +9,7 @@
     "backgroundColor": "#0b0f1a",
     "newArchEnabled": true,
     "ios": {
-      "bundleIdentifier": "com.nefes.app",
+      "bundleIdentifier": "com.mutlumeydan.nefes",
       "buildNumber": "1",
       "supportsTablet": true,
       "infoPlist": {
@@ -18,7 +18,7 @@
       }
     },
     "android": {
-      "package": "com.nefes.app",
+      "package": "com.mutlumeydan.nefes",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
